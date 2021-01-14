@@ -2,7 +2,7 @@ from django.db import models
 from rest_framework import serializers
 from django.core.serializers import serialize
 
-from customer.models import TablestableInStore , Tabledailydate , Meats , Orders
+from customer.models import TablestableInStore , Tabledailydate , Meat , Orders
 
 
 class TableDailySerializers(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class TableDailySerializers(serializers.ModelSerializer):
 class MeatSerializers(serializers.ModelSerializer):
     # meat_list = OrderSerializers(many=True)
     class Meta:
-        model = Meats
+        model = Meat
         fields = '__all__'
 
 class OrderSerializers(serializers.ModelSerializer):

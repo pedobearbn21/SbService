@@ -30,7 +30,7 @@ class  Tabledailydate(models.Model):
 class TypeOfMeat(models.Model):
     name_type = models.CharField(max_length=255)
 
-class Meats(models.Model):
+class Meat(models.Model):
     name = models.CharField(max_length=255)
     cost = models.IntegerField(default=0)
     quantity = models.IntegerField(default=0)
@@ -42,28 +42,20 @@ class Orders(models.Model):
     
     ORDERED = 'ORDERED'
     SERVED = 'SERVED'
-
     Status_Table = [
         (ORDERED, 'ORDERED'),
         (SERVED, 'SERVED'),
     ]
-
     status = models.CharField(
                 max_length=7,
                 choices=Status_Table,
                 default=ORDERED
             )
-    
-    order_time = models.DateTimeField(auto_created=True)
+    order_time = models.DateTimeField(auto_created=True,null=True,blank=True)
     serve_time = models.DateTimeField(null=True,blank=True)
-
-    meats  = models.ManyToManyField(Meats)
-
-    table = models.ForeignKey(Tabledailydate,on_delete=models.CASCADE,related_name='order_table')
-
-    # def __str__(self) -> str:
-    #     # meat_list  = ''.join(self.meat)
-
-    #     return f'id :{self.id},  status:{self.status.all()}'
+    meats  = models.ManyToManyField(Meat)
+    # table = models.ForeignKey(Tabledailydate,on_delete=models.CASCADE,related_name='order_table')
+    # def __str__(self):
+    #     return self.table.name
 
 
