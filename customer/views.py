@@ -41,13 +41,6 @@ class OrderIDView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'id'
     serializer_class = OrderSerializers
 
-class CreateNestMeatInOrder(View):
-    def post(self, request, *args, **kwargs):
-        # order = Orders(self.request)
-        response = None
-        print(request.data)
-        return Response(request.data)
-
 class OrderPost(viewsets.ModelViewSet):
     queryset = Orders.objects.all()
     serializer_class = OrderSerializers
