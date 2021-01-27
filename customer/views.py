@@ -58,7 +58,7 @@ class Search(generics.ListAPIView):
 
     def get_queryset(self):
         type_id = self.kwargs.get(self.lookup_url_kwarg)
-        meatlist = Meats.objects.filter(type=type_id)
+        meatlist = Meat.objects.filter(type=type_id)
         return meatlist
 
 class GraphTotalCustomer(generics.ListAPIView):
