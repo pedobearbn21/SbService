@@ -20,7 +20,6 @@ def orderoder(request):
         for item in request.data['meats']:
             meat = Meat.objects.get(pk=item['id'])
             serializer_reciept = OrderReciept(meat=meat,order_id=serializer.id,quantity=item['quantity'])
-            # serializer.meats.add(meat)
             meat.quantity = meat.quantity - item['quantity']
             if(meat.quantity < 0):
                 serializer.delete()
@@ -28,6 +27,15 @@ def orderoder(request):
             serializer_reciept.save()
             meat.save()
         return Response('', status=status.HTTP_201_CREATED)
+
+class TableView(generics.ListCreateAPIView):
+    serializer_class = TableDailySerializers
+    queryset = Tabledailydate.objects.all()
+
+class TableIDView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = TableDailySerializers
+    lookup_field = 'id'
+    queryset = Tabledailydate.objects.all()
 
 
 class OrderView(generics.ListCreateAPIView):

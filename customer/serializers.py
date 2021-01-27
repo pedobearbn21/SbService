@@ -18,12 +18,7 @@ class MeatSerializers(serializers.ModelSerializer):
 
 class OrderSerializers(serializers.ModelSerializer):
     meats = MeatSerializers(many=True, read_only=True)
-    # meat_with_cost = serializers.SerializerMethodField('meat_cost')
-    #  def meat_cost(self, obj):
-    #      data = Meats.objects.filter
-    #      return 
 
-    
     class Meta:
         model = Orders
         fields = '__all__'
