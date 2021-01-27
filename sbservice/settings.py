@@ -15,7 +15,7 @@ import django_heroku
 import os
 import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,31 +27,31 @@ SECRET_KEY = '_g*oe2qmf2=6v+g^2fo8$1@u^5!!^!k(56vk&$(^%8%ttvu3!x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'floating-savannah-37687.herokuapp.com']
-CORS_ALLOWED_ORIGINS = [
-    "https://localhost",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000"
-]
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1','floating-savannah-37687.herokuapp.com']
+# CORS_ALLOWED_ORIGINS = [
+#     "https://localhost",
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000"
+# ]
+# CORS_ALLOW_METHODS = [
+#     'DELETE',
+#     'GET',
+#     'OPTIONS',
+#     'PATCH',
+#     'POST',
+#     'PUT',
+# ]
+# CORS_ALLOW_HEADERS = [
+#     'accept',
+#     'accept-encoding',
+#     'authorization',
+#     'content-type',
+#     'dnt',
+#     'origin',
+#     'user-agent',
+#     'x-csrftoken',
+#     'x-requested-with',
+# ]
 
 # Application definition
 
@@ -165,7 +165,9 @@ USE_TZ = True
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
-django_heroku.settings(locals())
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'project_name/static')
+]
 
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media') 
 MEDIA_URL = '/media/'
+django_heroku.settings(locals())

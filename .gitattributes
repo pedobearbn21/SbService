@@ -1,3 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-.sb_env/
+sb_env/
+media/
