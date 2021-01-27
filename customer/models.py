@@ -53,9 +53,12 @@ class Orders(models.Model):
             )
     order_time = models.DateTimeField(auto_created=True,null=True,blank=True)
     serve_time = models.DateTimeField(null=True,blank=True)
-    meats  = models.ManyToManyField(Meat)
-    # table = models.ForeignKey(Tabledailydate,on_delete=models.CASCADE,related_name='order_table')
+    meat  = models.ManyToManyField(Meat, through='OrderReciept')
+    table = models.ForeignKey(Tabledailydate,on_delete=models.CASCADE,related_name='order_table', default='')
     # def __str__(self):
     #     return self.table.name
 
-
+class OrderReciept(models.Model):
+    meat = models.ForeignKey(Meat, on_delete=models.CASCADE)
+    order = models.ForeignKey(Orders, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)

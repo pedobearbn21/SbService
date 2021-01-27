@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from rest_framework import status
+from rest_framework.response import Response
 from django.views import View
-from customer.models import TablestableInStore , Tabledailydate , Meat , Orders
+from customer.models import TablestableInStore , Tabledailydate , Meat , Orders, OrderReciept
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -13,27 +15,23 @@ from django.utils import timezone
 @api_view(['POST'])
 def orderoder(request):
     if request.method == 'POST' :
-        serializer = Orders(order_time=request.data['order_time'])
-        print(serializer)
-        # if serializer.is_valid():
-        #     pass
+        serializer = Orders(order_time=request.data['order_time'],table_id=request.data['table_id'])
         serializer.save()
         for item in request.data['meats']:
             meat = Meat.objects.get(pk=item['id'])
-            # print(meat)
-            serializer.meats.add(meat)
-            print(serializer)
-        return HttpResponse(serializer)
+            serializer_reciept = OrderReciept(meat=meat,order_id=serializer.id,quantity=item['quantity'])
+            # serializer.meats.add(meat)
+            meat.quantity = meat.quantity - item['quantity']
+            if(meat.quantity < 0):
+                serializer.delete()
+                return Response(f'{ meat.name } not enough',status=status.HTTP_400_BAD_REQUEST)
+            serializer_reciept.save()
+            meat.save()
+        return Response('', status=status.HTTP_201_CREATED)
 
 
 class OrderView(generics.ListCreateAPIView):
     serializer_class = OrderSerializers
-
-    def post(self, request,*args, **kwargs):
-        order = Orders(self.request)
-        response = request
-        print(request)
-        return HttpResponse(response,content_type='text/json')
     queryset = Orders.objects.all()
 
 class OrderIDView(generics.RetrieveUpdateDestroyAPIView):

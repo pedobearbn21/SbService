@@ -110,21 +110,21 @@ WSGI_APPLICATION = 'sbservice.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'test',
-#         'USER': 'root',
-#         'PASSWORD': ''
-#         # 'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://uswbwvvczbjbuk:b9e6b621794e2c8c7baea305f7ae82ab7148047fbc546c6edcaf2731f1f154fb@ec2-54-144-196-35.compute-1.amazonaws.com:5432/dclmar64a7485f'
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sb',
+        'USER': 'root',
+        'PASSWORD': ''
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default='postgres://uswbwvvczbjbuk:b9e6b621794e2c8c7baea305f7ae82ab7148047fbc546c6edcaf2731f1f154fb@ec2-54-144-196-35.compute-1.amazonaws.com:5432/dclmar64a7485f'
+#     )
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
