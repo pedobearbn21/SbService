@@ -122,7 +122,7 @@ WSGI_APPLICATION = 'sbservice.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgres://uswbwvvczbjbuk:b9e6b621794e2c8c7baea305f7ae82ab7148047fbc546c6edcaf2731f1f154fb@ec2-54-144-196-35.compute-1.amazonaws.com:5432/dclmar64a7485f'
+        default='postgres://wsuboazobljoyt:86b5d3d765d6c150011612176b8c3738fd14c6739c4dd09eba8ba20a9dc10090@ec2-54-211-55-24.compute-1.amazonaws.com:5432/dd4h15dna0p31'
     )
 }
 

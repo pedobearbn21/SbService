@@ -4,6 +4,10 @@ from django.core.serializers import serialize
 
 from customer.models import TablestableInStore , Tabledailydate , Meat , Orders
 
+class TableStableSerializers(serializers.ModelSerializer):
+    class Meta :
+        model = TablestableInStore
+        fields = '__all__'
 
 class TableDailySerializers(serializers.ModelSerializer):
     class Meta :

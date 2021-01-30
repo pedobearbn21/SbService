@@ -3,6 +3,19 @@ from django.db import models
 # Create your models here.
 class TablestableInStore(models.Model):
     name = models.CharField(max_length=10)
+    OPEN = 'OPEN'
+    CLOSE = 'CLOSE'
+
+    Status_Table = [
+        (OPEN, 'OPEN'),
+        (CLOSE, 'CLOSE'),
+    ]
+
+    status = models.CharField(
+                max_length=5,
+                choices=Status_Table,
+                default=CLOSE
+            )
 
 class  Tabledailydate(models.Model):
 

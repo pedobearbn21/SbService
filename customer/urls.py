@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from customer.views import TableView, TableIDView,orderoder,OrderView, OrderIDView, MeatView, MeatIDView,Search,GraphTotalCustomer, OrderPost
+from customer.views import TableStableView,TableView, TableIDView,orderoder,OrderView, OrderIDView, MeatView, MeatIDView,Search,GraphTotalCustomer, OrderPost
 # from rest_framework.routers import DefaultRouter
 # router = DefaultRouter()
 # router.register(r'meat', OrderPost, basename='user')
@@ -23,6 +23,8 @@ urlpatterns = [
     path('orderlist', orderoder),
     path('allorder', OrderView.as_view()),
     path('order/<int:id>', OrderIDView.as_view()),
+
+    path('tablestale', TableStableView.as_view()),
 
     path('table', TableView.as_view()),
     path('table/<int:id>', TableIDView.as_view()),

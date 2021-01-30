@@ -7,7 +7,7 @@ from customer.models import TablestableInStore , Tabledailydate , Meat , Orders,
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from customer.serializers import OrderSerializers, MeatSerializers, TableDailySerializers, OrderManySerializers
+from customer.serializers import TableStableSerializers,OrderSerializers, MeatSerializers, TableDailySerializers, OrderManySerializers
 from django.utils import timezone
 
 
@@ -27,6 +27,11 @@ def orderoder(request):
             serializer_reciept.save()
             meat.save()
         return Response('', status=status.HTTP_201_CREATED)
+
+class TableStableView(generics.ListCreateAPIView):
+    serializer_class = TableStableSerializers
+    queryset = TablestableInStore.objects.all()
+
 
 class TableView(generics.ListCreateAPIView):
     serializer_class = TableDailySerializers
