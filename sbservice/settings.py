@@ -27,31 +27,31 @@ SECRET_KEY = '_g*oe2qmf2=6v+g^2fo8$1@u^5!!^!k(56vk&$(^%8%ttvu3!x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1','floating-savannah-37687.herokuapp.com']
-# CORS_ALLOWED_ORIGINS = [
-#     "https://localhost",
-#     "http://localhost:3000",
-#     "http://127.0.0.1:3000"
-# ]
-# CORS_ALLOW_METHODS = [
-#     'DELETE',
-#     'GET',
-#     'OPTIONS',
-#     'PATCH',
-#     'POST',
-#     'PUT',
-# ]
-# CORS_ALLOW_HEADERS = [
-#     'accept',
-#     'accept-encoding',
-#     'authorization',
-#     'content-type',
-#     'dnt',
-#     'origin',
-#     'user-agent',
-#     'x-csrftoken',
-#     'x-requested-with',
-# ]
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1','floating-savannah-37687.herokuapp.com', 'buffetservice.herokuapp.com']
+CORS_ALLOWED_ORIGINS = [
+    "https://localhost",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
+]
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 # Application definition
 
