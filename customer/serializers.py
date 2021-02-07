@@ -16,12 +16,14 @@ class TableDailySerializers(serializers.ModelSerializer):
 
 class MeatSerializers(serializers.ModelSerializer):
     # meat_list = OrderSerializers(many=True)
+
     class Meta:
         model = Meat
         fields = '__all__'
 
 class OrderSerializers(serializers.ModelSerializer):
     meats = MeatSerializers(many=True, read_only=True)
+    
 
     class Meta:
         model = Orders

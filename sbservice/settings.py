@@ -14,6 +14,7 @@ from pathlib import Path
 import django_heroku
 import os
 import dj_database_url
+import cloudinary
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -65,8 +66,15 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'customer',
+    'cloudinary'
 
 ]
+
+cloudinary.config(
+    cloud_name = os.environ.get("cloud_name"),
+    api_key = os.environ.get("api_key"),
+    api_secret = os.environ.get("api_secret")
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -168,6 +176,4 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'project_name/static')
 ]
 
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'media') 
-MEDIA_URL = '/media/'
 django_heroku.settings(locals())

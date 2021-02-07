@@ -1,4 +1,5 @@
 from django.db import models
+from cloudinary.models import CloudinaryField
 
 # Create your models here.
 class TablestableInStore(models.Model):
@@ -47,7 +48,7 @@ class Meat(models.Model):
     name = models.CharField(max_length=255)
     cost = models.IntegerField(default=0)
     quantity = models.IntegerField(default=0)
-    meat_img = models.ImageField(upload_to='images/meat/', default='') 
+    meat_img = CloudinaryField('image')
     type = models.ForeignKey(TypeOfMeat, on_delete=models.CASCADE, related_name='type_of_meat')
     def __str__(self):
         return f'name : {self.name}, quantity : {self.quantity}, type : {self.type.name_type}'

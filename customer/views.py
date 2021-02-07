@@ -57,8 +57,8 @@ class OrderPost(viewsets.ModelViewSet):
     serializer_class = OrderSerializers
 
 class MeatView(generics.ListCreateAPIView):
-    queryset = Meat.objects.all()
     serializer_class = MeatSerializers
+    queryset = Meat.objects.all()
 
 class MeatIDView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Meat.objects.all()
