@@ -64,7 +64,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'celery',
     'customer',
+    'django_celery_results',
 
 ]
 
@@ -110,21 +112,21 @@ WSGI_APPLICATION = 'sbservice.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'sb',
-#         'USER': 'root',
-#         'PASSWORD': ''
-#         # 'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://wsuboazobljoyt:86b5d3d765d6c150011612176b8c3738fd14c6739c4dd09eba8ba20a9dc10090@ec2-54-211-55-24.compute-1.amazonaws.com:5432/dd4h15dna0p31'
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sb',
+        'USER': 'root',
+        'PASSWORD': ''
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default='postgres://wsuboazobljoyt:86b5d3d765d6c150011612176b8c3738fd14c6739c4dd09eba8ba20a9dc10090@ec2-54-211-55-24.compute-1.amazonaws.com:5432/dd4h15dna0p31'
+#     )
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -157,6 +159,17 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+# CELERY_RESULT_BACKEND = 'amqp://guest:guest@localhost:5672/'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+BROKER_URL = 'amqp://guest:guest@localhost:5672/' 
+
 
 
 # Static files (CSS, JavaScript, Images)

@@ -14,12 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from customer.views import TableStableView,TableView, TableIDView,orderoder,OrderView, OrderIDView, MeatView, MeatIDView,Search,GraphTotalCustomer, OrderPost
-# from rest_framework.routers import DefaultRouter
-# router = DefaultRouter()
-# router.register(r'meat', OrderPost, basename='user')
-# urlpatterns = router.urls
+from customer.views import taskGenUser,TableStableView,TableView, TableIDView,orderoder,OrderView, OrderIDView, MeatView, MeatIDView,Search,GraphTotalCustomer, OrderPost
+
+
 urlpatterns = [
+    path('gentask/<int:total>',taskGenUser),
     path('orderlist', orderoder),
     path('allorder', OrderView.as_view()),
     path('order/<int:id>', OrderIDView.as_view()),

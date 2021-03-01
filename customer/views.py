@@ -9,24 +9,44 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from customer.serializers import TableStableSerializers,OrderSerializers, MeatSerializers, TableDailySerializers, OrderManySerializers
 from django.utils import timezone
+from customer.tasks import create_random_user_accounts, add_meats_task
+from celery import group
+from django.contrib import messages
+
+@api_view(['GET'])
+def taskGenUser(request,total):
+    res = create_random_user_accounts.delay(total)
+    res.get()
+    messages.success(request, 'We are generating your random users! Wait a moment and refresh this page.')
+    return HttpResponse('success')
 
 
 # Create your views here.
 @api_view(['POST'])
 def orderoder(request):
     if request.method == 'POST' :
-        serializer = Orders(order_time=request.data['order_time'],table_id=request.data['table_id'])
-        serializer.save()
-        for item in request.data['meats']:
-            meat = Meat.objects.get(pk=item['id'])
-            serializer_reciept = OrderReciept(meat=meat,order_id=serializer.id,quantity=item['quantity'])
-            meat.quantity = meat.quantity - item['quantity']
-            if(meat.quantity < 0):
-                serializer.delete()
-                return Response(f'{ meat.name } not enough',status=status.HTTP_400_BAD_REQUEST)
-            serializer_reciept.save()
-            meat.save()
-        return Response('', status=status.HTTP_201_CREATED)
+        order_time = request.data['order_time']
+        table_id = request.data['table_id']
+        meats = request.data['meats']
+        res = add_meats_task.delay(order_time,table_id,meats)
+        # serializer = Orders(order_time=request.data['order_time'],table_id=request.data['table_id'])
+        # serializer.save()
+        # for item in request.data['meats']:
+        #     meat = Meat.objects.get(pk=item['id'])
+        #     serializer_reciept = OrderReciept(meat=meat,order_id=serializer.id,quantity=item['quantity'])
+        #     meat.quantity = meat.quantity - item['quantity']
+        #     if(meat.quantity < 0):
+        #         serializer.delete()
+        #         return Response(f'{ meat.name } not enough',status=status.HTTP_400_BAD_REQUEST)
+        #     serializer_reciept.save()
+        #     meat.save()
+        while not (res.ready()):
+            pass
+        if (res.get()):
+            return Response('', status=status.HTTP_201_CREATED)
+        else:
+            return Response(f'Meat not enough',status=status.HTTP_400_BAD_REQUEST)
+
 
 class TableStableView(generics.ListCreateAPIView):
     serializer_class = TableStableSerializers
