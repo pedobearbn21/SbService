@@ -100,3 +100,15 @@ class GraphTotalCustomer(generics.ListAPIView):
     def get_queryset(self):
         total = Tabledailydate.objects.filter(table_open_time__date = timezone.now())
         return total
+
+
+# Order which alredy Order Meat and Search by table
+class OrderSearhByTable(generics.ListAPIView):
+    serializer_class = OrderSerializers
+    lookup_url_kwarg = 'table_id'
+
+    def get_queryset(self):
+        table_search_id = self.kwargs.get(self.lookup_url_kwarg)
+        order = Orders.objects.filter(table_id = table_search_id )
+        print(order)
+        return order
