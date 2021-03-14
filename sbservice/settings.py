@@ -31,7 +31,8 @@ ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1','floating-savannah-37687.he
 CORS_ALLOWED_ORIGINS = [
     "https://localhost",
     "http://localhost:3000",
-    "http://127.0.0.1:3000"
+    "http://127.0.0.1:3000",
+    "http://localhost:3001"
 ]
 CORS_ALLOW_METHODS = [
     'DELETE',

@@ -3,11 +3,11 @@ from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.response import Response
 from django.views import View
-from customer.models import TablestableInStore , Tabledailydate , Meat , Orders, OrderReciept
+from customer.models import TablestableInStore , Tabledailydate , Meat , Orders, OrderReciept, TypeOfMeat
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from customer.serializers import TableStableSerializers,OrderSerializers, MeatSerializers, TableDailySerializers, OrderManySerializers
+from customer.serializers import TypeOfMeatSerializers,OrderWithThrouthSerializers, TableStableSerializers,OrderSerializers, MeatSerializers, TableDailySerializers, OrderManySerializers
 from django.utils import timezone
 from customer.tasks import create_random_user_accounts, add_meats_task
 from celery import group
@@ -28,34 +28,39 @@ def orderoder(request):
         order_time = request.data['order_time']
         table_id = request.data['table_id']
         meats = request.data['meats']
-        res = add_meats_task.delay(order_time,table_id,meats)
-        # serializer = Orders(order_time=request.data['order_time'],table_id=request.data['table_id'])
-        # serializer.save()
-        # for item in request.data['meats']:
-        #     meat = Meat.objects.get(pk=item['id'])
-        #     serializer_reciept = OrderReciept(meat=meat,order_id=serializer.id,quantity=item['quantity'])
-        #     meat.quantity = meat.quantity - item['quantity']
-        #     if(meat.quantity < 0):
-        #         serializer.delete()
-        #         return Response(f'{ meat.name } not enough',status=status.HTTP_400_BAD_REQUEST)
-        #     serializer_reciept.save()
-        #     meat.save()
-        while not (res.ready()):
-            pass
-        if (res.get()):
-            return Response('', status=status.HTTP_201_CREATED)
-        else:
-            return Response(f'Meat not enough',status=status.HTTP_400_BAD_REQUEST)
+        # res = add_meats_task.delay(order_time,table_id,meats)
+        serializer = Orders(order_time=request.data['order_time'],table_id=request.data['table_id'])
+        serializer.save()
+        for item in request.data['meats']:
+            meat = Meat.objects.get(pk=item['id'])
+            serializer_reciept = OrderReciept(meat=meat,order_id=serializer.id,quantity=item['quantity'])
+            meat.quantity = meat.quantity - item['quantity']
+            if(meat.quantity < 0):
+                serializer.delete()
+                return Response(f'{ meat.name } not enough',status=status.HTTP_400_BAD_REQUEST)
+            serializer_reciept.save()
+            meat.save()
+        return Response('Success', status=status.HTTP_201_CREATED)
+        # while not (res.ready()):
+        #     pass
+        # if (res.get()):
+        #     return Response('', status=status.HTTP_201_CREATED)
+        # else:
+        #     return Response(f'Meat not enough',status=status.HTTP_400_BAD_REQUEST)
 
 
 class TableStableView(generics.ListCreateAPIView):
     serializer_class = TableStableSerializers
     queryset = TablestableInStore.objects.all()
 
+class TableStableIDView(generics.RetrieveUpdateAPIView):
+    serializer_class = TableStableSerializers
+    lookup_field = 'id'
+    queryset = TablestableInStore.objects.all()
 
 class TableView(generics.ListCreateAPIView):
     serializer_class = TableDailySerializers
-    queryset = Tabledailydate.objects.all()
+    queryset = Tabledailydate.objects.filter(status='OPEN')
 
 class TableIDView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TableDailySerializers
@@ -63,18 +68,24 @@ class TableIDView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Tabledailydate.objects.all()
 
 
+
+
+
 class OrderView(generics.ListCreateAPIView):
-    serializer_class = OrderSerializers
+    serializer_class = OrderWithThrouthSerializers
     queryset = Orders.objects.all()
 
 class OrderIDView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Orders.objects.all()
     lookup_field = 'id'
-    serializer_class = OrderSerializers
+    serializer_class = OrderWithThrouthSerializers
 
 class OrderPost(viewsets.ModelViewSet):
     queryset = Orders.objects.all()
     serializer_class = OrderSerializers
+
+
+    
 
 class MeatView(generics.ListCreateAPIView):
     queryset = Meat.objects.all()
@@ -85,6 +96,13 @@ class MeatIDView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'id'
     serializer_class = MeatSerializers
 
+
+class TypesView(generics.ListCreateAPIView):
+    queryset = TypeOfMeat.objects.all()
+    serializer_class = TypeOfMeatSerializers
+
+
+
 class Search(generics.ListAPIView):
     serializer_class = MeatSerializers
     lookup_url_kwarg = 'type'
@@ -93,6 +111,13 @@ class Search(generics.ListAPIView):
         type_id = self.kwargs.get(self.lookup_url_kwarg)
         meatlist = Meat.objects.filter(type=type_id)
         return meatlist
+
+class SearchMeatByText(generics.ListAPIView):
+    serializer_class = MeatSerializers
+    lookup_url_kwarg = 'text'
+    def get_queryset(self):
+        return Meat.objects.filter(name__icontains = self.kwargs.get(self.lookup_url_kwarg))
+    
 
 class GraphTotalCustomer(generics.ListAPIView):
     serializer_class = TableDailySerializers
@@ -104,11 +129,10 @@ class GraphTotalCustomer(generics.ListAPIView):
 
 # Order which alredy Order Meat and Search by table
 class OrderSearhByTable(generics.ListAPIView):
-    serializer_class = OrderSerializers
+    serializer_class = OrderWithThrouthSerializers
     lookup_url_kwarg = 'table_id'
 
     def get_queryset(self):
         table_search_id = self.kwargs.get(self.lookup_url_kwarg)
-        order = Orders.objects.filter(table_id = table_search_id )
-        print(order)
+        order = Orders.objects.filter(table_id = table_search_id ).order_by('status','-id')
         return order
