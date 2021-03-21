@@ -60,12 +60,17 @@ class TableStableIDView(generics.RetrieveUpdateAPIView):
 
 class TableView(generics.ListCreateAPIView):
     serializer_class = TableDailySerializers
+    # queryset = Tabledailydate.objects.filter(status='OPEN')
     queryset = Tabledailydate.objects.filter(status='OPEN')
 
-class TableIDView(generics.RetrieveUpdateDestroyAPIView):
+class TableIDView(generics.ListAPIView):
     serializer_class = TableDailySerializers
-    lookup_field = 'id'
-    queryset = Tabledailydate.objects.all()
+    lookup_url_kwarg = 'table_id'
+
+    def get_queryset(self):
+        table_stable_id = self.kwargs.get(self.lookup_url_kwarg)
+        table = Tabledailydate.objects.filter(table=table_stable_id,status='CLOSE')
+        return table
 
 
 

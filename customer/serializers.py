@@ -4,14 +4,21 @@ from django.core.serializers import serialize
 
 from customer.models import OrderReciept, TablestableInStore , Tabledailydate , Meat , Orders, TypeOfMeat
 
-class TableStableSerializers(serializers.ModelSerializer):
-    class Meta :
-        model = TablestableInStore
-        fields = '__all__'
 
 class TableDailySerializers(serializers.ModelSerializer):
     class Meta :
         model = Tabledailydate
+        fields = '__all__'
+
+class TableStableSerializers(serializers.ModelSerializer):
+    # table_use_id =TableDailySerializers(source='table_of_dailytable', many=True,read_only=True)
+    table_dialy  = serializers.SerializerMethodField('get_table')
+    def get_table(self, obj):
+        table = Tabledailydate.objects.filter(table_id = obj.id).values().order_by('-id').first()
+        serializer_class = TableDailySerializers
+        return table
+    class Meta :
+        model = TablestableInStore
         fields = '__all__'
 
 class MeatSerializers(serializers.ModelSerializer):

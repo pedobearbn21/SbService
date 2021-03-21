@@ -26,10 +26,10 @@ urlpatterns = [
     path('order/<int:id>', OrderIDView.as_view()),
 
     path('tablestable', TableStableView.as_view()),
-    path('tablestable', TableStableIDView.as_view()),
+    path('tablestable/<int:id>', TableStableIDView.as_view()),
 
     path('table', TableView.as_view()),
-    path('table/<int:id>', TableIDView.as_view()),
+    path('table/<int:table_id>', TableIDView.as_view()),
 
     path('meatlist', MeatView.as_view()),
     path('meat/<int:id>', MeatIDView.as_view()),

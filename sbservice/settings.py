@@ -27,7 +27,7 @@ SECRET_KEY = '_g*oe2qmf2=6v+g^2fo8$1@u^5!!^!k(56vk&$(^%8%ttvu3!x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1','floating-savannah-37687.herokuapp.com', 'buffetservice.herokuapp.com']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1','floating-savannah-37687.herokuapp.com', 'buffetservice.herokuapp.com','*']
 CORS_ALLOWED_ORIGINS = [
     "https://localhost",
     "http://localhost:3000",
