@@ -77,3 +77,6 @@ class OrderReciept(models.Model):
     meat = models.ForeignKey(Meat, related_name='order_to_meat', on_delete=models.CASCADE)
     order = models.ForeignKey(Orders,related_name='meat_to_order', on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
+
+
+

@@ -7,7 +7,7 @@ from customer.models import TablestableInStore , Tabledailydate , Meat , Orders,
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from customer.serializers import TypeOfMeatSerializers,OrderWithThrouthSerializers, TableStableSerializers,OrderSerializers, MeatSerializers, TableDailySerializers, OrderManySerializers
+from customer.serializers import MeatSerializers, OrderManySerializers, OrderRecieptSerailizers, OrderSerializers, OrderWithThrouthSerializers, TableDailySerializers, TableStableSerializers, TypeOfMeatSerializers
 from django.utils import timezone
 from customer.tasks import create_random_user_accounts, add_meats_task
 from celery import group
@@ -63,6 +63,11 @@ class TableView(generics.ListCreateAPIView):
     # queryset = Tabledailydate.objects.filter(status='OPEN')
     queryset = Tabledailydate.objects.filter(status='OPEN')
 
+class TableViewUpdate(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = TableDailySerializers
+    lookup_field = 'id'
+    queryset = Tabledailydate.objects.all()
+
 class TableIDView(generics.ListAPIView):
     serializer_class = TableDailySerializers
     lookup_url_kwarg = 'table_id'
@@ -88,8 +93,6 @@ class OrderIDView(generics.RetrieveUpdateDestroyAPIView):
 class OrderPost(viewsets.ModelViewSet):
     queryset = Orders.objects.all()
     serializer_class = OrderSerializers
-
-
     
 
 class MeatView(generics.ListCreateAPIView):
@@ -141,3 +144,24 @@ class OrderSearhByTable(generics.ListAPIView):
         table_search_id = self.kwargs.get(self.lookup_url_kwarg)
         order = Orders.objects.filter(table_id = table_search_id ).order_by('status','-id')
         return order
+
+
+from django.db.models import Count, Sum
+class OrRecReport(generics.ListAPIView):
+    serializer_class = OrderWithThrouthSerializers
+    def get_queryset(self):
+        return Orders.objects.filter(order_time__date = timezone.now())
+
+@api_view(['get'])
+def MeatInNeed(request):
+    serializer =  OrderReciept.objects.filter(order__status = 'ORDERED').values('meat').annotate(Sum('quantity'))
+    for i in serializer:
+        meat = Meat.objects.get(pk=i['meat'])
+        i['meat'] = meat.name
+    return Response(serializer, status=status.HTTP_200_OK)
+# class MeatInNeed(generics.ListAPIView):
+#     serializer_class = OrderRecieptSerailizers
+#     def get_queryset(self):
+#         return OrderReciept.objects.annotate(Sum('quantity')).values('meat')
+    
+    

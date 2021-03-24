@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from customer.views import TableStableIDView, TypesView, SearchMeatByText, OrderSearhByTable, taskGenUser,TableStableView,TableView, TableIDView,orderoder,OrderView, OrderIDView, MeatView, MeatIDView,Search,GraphTotalCustomer, OrderPost
+from customer.views import MeatInNeed,OrRecReport, TableViewUpdate, TableStableIDView, TypesView, SearchMeatByText, OrderSearhByTable, taskGenUser,TableStableView,TableView, TableIDView,orderoder,OrderView, OrderIDView, MeatView, MeatIDView,Search,GraphTotalCustomer, OrderPost
 
 
 urlpatterns = [
@@ -29,11 +29,12 @@ urlpatterns = [
     path('tablestable/<int:id>', TableStableIDView.as_view()),
 
     path('table', TableView.as_view()),
+    path('table/update/<int:id>',TableViewUpdate.as_view()),
     path('table/<int:table_id>', TableIDView.as_view()),
 
     path('meatlist', MeatView.as_view()),
     path('meat/<int:id>', MeatIDView.as_view()),
-
+    path('meat/inneed',MeatInNeed),
 
     path('type', TypesView.as_view()),
 
@@ -43,6 +44,7 @@ urlpatterns = [
     
     #Graph Total Customer Today
     path('totalcustomer', GraphTotalCustomer.as_view()),
+    path('testgb', OrRecReport.as_view()),
 
 
     path('ordersearch/<int:table_id>',OrderSearhByTable.as_view())

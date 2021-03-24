@@ -39,10 +39,10 @@ class OrderSerializers(serializers.ModelSerializer):
 
 class OrderRecieptSerailizers(serializers.ModelSerializer):
     name = serializers.CharField(source='meat.name')
+    # meat_id = serializers.IntegerField(source='meat.id')
     class Meta: 
         model = OrderReciept
-        fields = ('quantity','name')
-        depth =1
+        fields = '__all__'
 
 
 class OrderWithThrouthSerializers(serializers.ModelSerializer):

@@ -26,10 +26,11 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = '_g*oe2qmf2=6v+g^2fo8$1@u^5!!^!k(56vk&$(^%8%ttvu3!x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True   
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1','floating-savannah-37687.herokuapp.com', 'buffetservice.herokuapp.com','*']
 CORS_ALLOWED_ORIGINS = [
+    "http://localhost",
     "https://localhost",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
@@ -53,6 +54,16 @@ CORS_ALLOW_HEADERS = [
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
+    'withcredentials',
+    'Referrer-Policy'
+]
+CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost",
+    "https://localhost",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:3001"
 ]
 
 # Application definition
@@ -72,6 +83,12 @@ INSTALLED_APPS = [
 
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
+
 # cloudinary.config(
 #     cloud_name = os.environ.get("cloud_name"),
 #     api_key = os.environ.get("api_key"),
@@ -82,7 +99,7 @@ cloudinary.config(
     api_key = "543842857855919",
     api_secret = "Yu7IgeM58OnDRqIUBO-oMC0-1mY"
 )
-
+CSRF_COOKIE_NAME = "XSRF-TOKEN"
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
